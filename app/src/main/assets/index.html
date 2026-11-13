@@ -111,7 +111,8 @@ const PMDF_TAF=['Avaliação física inicial e orientação profissional','Trein
 s.pmdf=s.pmdf||{done:[],notes:{},questionLogs:[],strategy:{},tafChecks:{},tafLogs:[],errorNotes:[]};
 Object.assign(s.pmdf,{done:s.pmdf.done||[],notes:s.pmdf.notes||{},questionLogs:s.pmdf.questionLogs||[],strategy:s.pmdf.strategy||{},tafChecks:s.pmdf.tafChecks||{},tafLogs:s.pmdf.tafLogs||[],errorNotes:s.pmdf.errorNotes||[]});
 let pmdfDuration=2400,pmdfRemaining=2400,pmdfInterval=null;
-function pmdfEsc(v){return String(v??'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;'}[c]))}\nfunction pmdfSave(){localStorage.setItem(K,JSON.stringify(s));renderPMDF()}
+function pmdfEsc(v){return String(v??'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;'}[c]))}
+function pmdfSave(){localStorage.setItem(K,JSON.stringify(s));renderPMDF()}
 function pmdfRenderCycle(){let el=document.getElementById('pmdfCycle');if(!el)return;el.innerHTML=PMDF_CYCLE.map((x,i)=>'<div class="plan '+(s.pmdf.done.includes(i)?'done':'')+'"><input style="width:auto;margin:2px 0" type="checkbox" '+(s.pmdf.done.includes(i)?'checked':'')+' onchange="pmdfToggleBlock('+i+',this.checked)"><div class="grow"><b>'+(i+1)+'. '+x[0]+'</b><div class="small muted">'+x[1]+' • 1 hora</div>'+(s.pmdf.notes[i]?'<div class="small muted">📝 '+pmdfEsc(s.pmdf.notes[i])+'</div>':'')+'</div><button class="btn gray" onclick="pmdfEditNote('+i+')">Anotar</button></div>').join('')}
 function pmdfToggleBlock(i,on){s.pmdf.done=s.pmdf.done.filter(x=>x!==i);if(on)s.pmdf.done.push(i);pmdfSave()}
 function pmdfEditNote(i){let v=prompt('Anotação do bloco '+(i+1)+':',s.pmdf.notes[i]||'');if(v!==null){s.pmdf.notes[i]=v.trim();pmdfSave()}}
